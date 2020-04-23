@@ -14,11 +14,19 @@ MongoClient.connect(connectionURL, {useNewUrlParser:true, useUnifiedTopology: tr
 
     const db = client.db(databaseName)
     
-    db.collection('users').insertOne({
-        name: 'Roee',
-        age:"26"
-    })
-    
-    
+    db.collection('tasks').insertMany(
+        [{
+            description: "finish the nodejs course",
+            complete: false
+        },{
+            description: "play call of duty",
+            complete: true
+        }
+        ], (error, result) => {
+            if( error) return 'could not insert the tasks you want to insert '
+            console.log(result.ops);
+            
+        })
+ 
 })
 
