@@ -2,6 +2,7 @@
 
 const mongodb = require('mongodb')
 const MongoClient = mongodb.MongoClient // help me to get more function for mongodb
+const ObjectID = mongodb.ObjectID
 
 const connectionURL = 'mongodb://127.0.0.1:27017'
 const databaseName = 'task-manager'
@@ -14,19 +15,11 @@ MongoClient.connect(connectionURL, {useNewUrlParser:true, useUnifiedTopology: tr
 
     const db = client.db(databaseName)
     
-    db.collection('tasks').insertMany(
-        [{
-            description: "finish the nodejs course",
-            complete: false
-        },{
-            description: "play call of duty",
-            complete: true
+    db.collection('tasks').find({ complete: false } ).toArray( (error, task) => {
+        if(error){
+            return console.log('unable to find the task');
         }
-        ], (error, result) => {
-            if( error) return 'could not insert the tasks you want to insert '
-            console.log(result.ops);
-            
-        })
- 
-})
 
+        console.log(task);
+        })
+})
