@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+var validator = require('validator');
 
 mongoose.connect('mongodb://127.0.0.1:27017/task-manager-api',{
     useNewUrlParser:    true,
@@ -28,7 +29,7 @@ const User = mongoose.model('User',{
         trim:  true,
         validate(value) {
             if(!validator.isEmail(value)){
-                throw new Error ('Email must be a validate')
+                throw new Error ('Email is invalid')
             }
         }
 
@@ -37,7 +38,7 @@ const User = mongoose.model('User',{
         type: String,
         require: true,
         trim: true,
-        //minlength: 7,
+        minlength: 7,
         validate(value){
             if(value.toLowerCase().includes('password')){
                 throw new Error ("Password cannot contain 'password'")
@@ -48,22 +49,24 @@ const User = mongoose.model('User',{
 
 const Task = mongoose.model('Task',{
     description:{
-        type: String
+        type: String,
+        require: true,
+        trim: true
     },
     completed:{
-        type: Boolean
+        type: Boolean,
+        default: false
     }
 })
 
-const me = new User({
+const user = new User({
     name:"    Roee",
-    email: "Roeeaa@walla.com",
     age: "24",
-    
+    email: "Roe@gamil.com",
     password: "  1234564s"
 })
 
-me.save().then((result) => {
+user.save().then((result) => {
     console.log(result);
     
 }).catch((error) => {
