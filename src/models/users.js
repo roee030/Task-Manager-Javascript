@@ -5,7 +5,7 @@ const User = mongoose.model('User',{
     name:{
         type: String,
         trim: true,
-        require: true
+        required: true
     },
     age:{
         type: Number,
@@ -18,7 +18,7 @@ const User = mongoose.model('User',{
     },
     email:{
         type: String,
-        require: true,
+        required: true,
         lowercase: true,
         trim:  true,
         validate(value) {
