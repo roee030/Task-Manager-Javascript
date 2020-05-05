@@ -12,9 +12,9 @@ app.post('/users', async (req, res) =>{
     const user = new User(req.body)
     try{
         await user.save()
-        res.status(201).send('The user save successfully')
+        res.status(201).send(user, 'The user save successfully')
     }catch{
-        res.send('Failed to save user')
+        res.status(400).send(e, 'Failed to save user')
     }
 })
 
@@ -22,11 +22,8 @@ app.post('/users', async (req, res) =>{
 app.get('/users', async (req, res) => {
     try{
         const users = await User.find({})
-        if(!users){
-            res.send('There is no users to shown')
-        }
         res.send(users)
-    }catch{
+    }catch(e){
         res.status(500).send()
     }
 })
@@ -37,10 +34,10 @@ app.get('/users/:id', async(req, res) => {
     try{
         const user = await User.findById(_id)
         if(!user){
-            res.send('There is no user with this id')
+            return res.send('There is no user with this id')
         }
         res.send(user)
-    }catch{
+    }catch(e){
         res.status(500).send('There is no user with this id')
     }
 })
@@ -50,9 +47,9 @@ app.post('/tasks', async(req, res) =>{
    const task = req.body
    try{
        await Task.save(task)
-       res.send('The task save successfully')
-   }catch{
-       res.status(500).send('Could not save the task')
+       res.send(task, 'The task save successfully')
+   }catch(e){
+       res.status(400).send(e, 'Could not save the task')
    }
 })
 
@@ -60,11 +57,8 @@ app.post('/tasks', async(req, res) =>{
 app.get('/tasks' , async (req, res) => {
     try{
         const tasks = await Task.find({})
-        if(!tasks){
-            res.send('There is no tasks')
-        }
         res.send(tasks)
-    }catch{
+    }catch(e){
         res.status(500).send('Could not find tasks')
     }
 
@@ -76,7 +70,7 @@ app.get('/tasks/:id' , async(req, res) => {
    try{
        const task = await Task.findById(id)
        if(!task){
-           res.send('There is no task with this id')
+           return res.send('There is no task with this id')
        }
    }catch{
        res.status(500).send('Could not find task with this id')
